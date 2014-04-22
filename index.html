@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Concert listings app</title>
+   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.0/jquery.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.2/handlebars.min.js"></script>
+</head>
+	<body>
+		<div class="container">
+		   <header>
+			  <h1>Concert listings app</h1>
+		   </header>
+		   <section id="fetch">
+			  <input type="text" placeholder="search for an artist/band" id="search_term" />
+			  <button id="search">Search for concerts</button>
+		   </section>
+
+			<script id="performer_query" type="text/x-handlebars-template"> 
+
+			{{#ifMultiple performers}}
+				{{#each performers}}
+					{{short_name}}
+					{{#if has_upcoming_events}}
+						<button performer="{{id}}" class="view_concerts">View concerts!</button>
+					{{else}}
+						No upcoming shows 
+					{{/if}}	
+						<br/>
+				{{/each}}
+			{{else}}
+				{{#ifEmpty performers}}
+						No results match your search!	
+				{{/ifEmpty}}			
+			{{/ifMultiple}}	
+			</script>
+			<script id="event_query" type="text/x-handlebars-template">
+				{{#each events}}
+						{{venue.name}}, {{venue.display_location}}
+			
+						{{#parseDate datetime_utc}}
+			
+						{{/parseDate}}
+						<br/>
+				{{/each}}
+			</script> 
+	
+			<div id="performer_results"></div>
+			<div id="event_results"></div>
+		</div>
+	</body>
+	<script src="concert_listings_script.js"></script>
+</html>
