@@ -18,14 +18,34 @@ Handlebars.registerHelper('ifEmpty', function(array, options) {
   }
 });
 
+
 //parse event dates
 Handlebars.registerHelper('parseDate', function(date) {
-	parsedDate = new Date(date);
-	var month = parsedDate.getMonth();
-	var day = parsedDate.getDate();
-	var year = parsedDate.getFullYear();
-	newdate = day + "/" + month + "/" + year;
-	return newdate;
+	date = new Date(date);
+	var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+
+  	parsedDate = date.getDate()+
+  			"-"+monthNames[date.getMonth()]+
+    		"-"+pad(date.getFullYear());
+   	return parsedDate
+});
+
+function pad(num) { return ("0"+num).slice(-2); }
+
+
+//create 'add to calendar' button with concert details as attributes 
+Handlebars.registerHelper('createCalendarButton', function(title, venue, address, city, timezone, date) {
+  	title = Handlebars.Utils.escapeExpression(title);
+	venue = Handlebars.Utils.escapeExpression(venue);
+	address = Handlebars.Utils.escapeExpression(address);
+	city = Handlebars.Utils.escapeExpression(city);
+	timezone = Handlebars.Utils.escapeExpression(timezone);
+	date = Handlebars.Utils.escapeExpression(date);
+
+  	var result = '<button class="calendar" title="' + title + '" venue="' + venue + '" address="' + address + '" city="' + city + '" timezone="' + timezone +'" date="' + date +'"> Add to Google Calender </button>';
+
+  	return new Handlebars.SafeString(result);
 });
 
 $('#search').on('click', find_performers);
@@ -66,6 +86,25 @@ function find_concerts(perfomer_id){
 		  //make call to the Seat Geek API with id of the selected performer	
 		  $.getJSON("http://api.seatgeek.com/2/events?performers.id="+performer_id+"&callback=?", function(concert_data) {
 				$('#event_results').append(template(concert_data)); 
+				console.log(concert_data);
+				$('.calendar').on('click', function(){
+				var title= $(this).attr("title");
+				var venue= $(this).attr("venue");
+				var address= $(this).attr("address");
+				var city= $(this).attr("city");
+				var timezone= $(this).attr("timezone");
+				var start_time= $(this).attr("date");
+				var location =  venue + ", " + address + ", " + city;
+				//Google calendar requires both a start and end time for events
+				//Create end time by adding 4 hours to start time
+				Date.prototype.addHours= function(h){
+					this.setHours(this.getHours()+h);
+					return this;
+				}
+				var end_time =(new Date(start_time).addHours(4));
+				console.log(title, location, start_time, end_time, timezone);
+				add_to_calendar(title, location, start_time, timezone, end_time);
+				}); 
 		});
 } 
 
@@ -79,5 +118,72 @@ $(document).ready(function() {
 	});
 });
 
- 
+/*
+function handleClientLoad() {
+  gapi.client.setApiKey(apiKey);
+  window.setTimeout(checkAuth,1);
+  checkAuth();
+}
+
+function checkAuth() {
+  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true},
+      handleAuthResult);
+}
+
+function handleAuthResult(authResult) {
+  var authorizeButton = document.getElementById('authorize-button');
+  if (authResult) {
+    authorizeButton.style.visibility = 'hidden';
+    makeApiCall();
+  } else {
+    authorizeButton.style.visibility = '';
+    authorizeButton.onclick = handleAuthClick;
+   }
+}
+
+function handleAuthClick(event) {
+  gapi.auth.authorize(
+      {client_id: clientId, scope: scopes, immediate: false},
+      handleAuthResult);
+  return false;
+}
+*/
+
+function add_to_calendar(title, location, start_time, timezone, end_time) {
+        var config = {
+      'client_id': '487743626220-b0qltmpuuvj76o31bls2f04o8ctlocvt.apps.googleusercontent.com',
+          'scope': 'https://www.googleapis.com/auth/calendar'
+        };
+    
+        gapi.auth.authorize(config, function() {
+          console.log('login complete');
+          console.log(gapi.auth.getToken());
+        });
+        gapi.client.load('calendar', 'v3', function() {
+			
+			var resource = {
+				  "summary": title,
+				  "location": location,
+				  "start": {
+						"dateTime": start_time,
+						"timeZone": timezone	
+				  },
+				  "end": {
+						"dateTime": end_time,
+						"timeZone": timezone
+				  }
+				};
+				
+			var request = gapi.client.calendar.events.insert({
+			  'calendarId': 'primary',
+			  'resource': resource
+			});
+			
+			request.execute(function(resp) {
+			  console.log(resp);
+			});
+
+      	});
+      }
+  
      

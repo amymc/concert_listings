@@ -5,6 +5,8 @@
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.0/jquery.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.2/handlebars.min.js"></script>
+	<script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script>
+
 </head>
 	<body>
 		<div class="container">
@@ -15,6 +17,7 @@
 			  <input type="text" placeholder="search for an artist/band" id="search_term" />
 			  <button id="search">Search for concerts</button>
 		   </section>
+			    <div id="results"></div>
 
 			<script id="performer_query" type="text/x-handlebars-template"> 
 
@@ -36,11 +39,16 @@
 			</script>
 			<script id="event_query" type="text/x-handlebars-template">
 				{{#each events}}
-						{{venue.name}}, {{venue.display_location}}
-			
+						{{title}}, {{venue.name}}, {{venue.display_location}}
+						
 						{{#parseDate datetime_utc}}
-			
+							
 						{{/parseDate}}
+						
+						{{#createCalendarButton title venue.name venue.address venue.city venue.timezone datetime_utc}}
+						
+						{{/createCalendarButton }}
+						
 						<br/>
 				{{/each}}
 			</script> 
