@@ -39,6 +39,7 @@ input{
 
 #performer_results, #event_results{
 	width: 50%;
+	min-width:367px;
 	margin: 0 auto;
 }
 
