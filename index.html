@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <title>Concert listings app</title>
-   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+   	<title>Concert listings app</title>
+   	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.0/jquery.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.2/handlebars.min.js"></script>
 	<script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script>
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="styles.css">
 
 </head>
 	<body>
@@ -14,43 +16,58 @@
 			  <h1>Concert listings app</h1>
 		   </header>
 		   <section id="fetch">
-			  <input type="text" placeholder="search for an artist/band" id="search_term" />
-			  <button id="search">Search for concerts</button>
+			  <input type="text" placeholder="enter an artist/band" id="search_term" />
+			  <button id="search" class="btn btn-primary">Search</button>
 		   </section>
 			    <div id="results"></div>
 
 			<script id="performer_query" type="text/x-handlebars-template"> 
-
-			{{#ifMultiple performers}}
-				{{#each performers}}
-					{{short_name}}
-					{{#if has_upcoming_events}}
-						<button performer="{{id}}" class="view_concerts">View concerts!</button>
-					{{else}}
-						No upcoming shows 
-					{{/if}}	
-						<br/>
-				{{/each}}
-			{{else}}
-				{{#ifEmpty performers}}
-						No results match your search!	
-				{{/ifEmpty}}			
-			{{/ifMultiple}}	
+				{{#ifMultiple performers}}
+					<table class="table">
+						<tbody>
+							{{#each performers}}
+								<tr>
+									<td class="title">{{short_name}}</td>
+									{{#if has_upcoming_events}}
+										<td><button performer="{{id}}" class="btn btn-primary view_concerts">View concerts!</button></td>
+									{{else}}
+										<td>No upcoming shows</td> 
+									{{/if}}
+								</tr>	
+							{{/each}}
+						</tbody>	
+					</table>
+				{{else}}
+					{{#ifEmpty performers}}
+							<div class="alert alert-danger">
+								No results match your search!	
+							</div>
+					{{/ifEmpty}}			
+				{{/ifMultiple}}	
+		
 			</script>
 			<script id="event_query" type="text/x-handlebars-template">
-				{{#each events}}
-						{{title}}, {{venue.name}}, {{venue.display_location}}
-						
-						{{#parseDate datetime_utc}}
-							
-						{{/parseDate}}
-						
-						{{#createCalendarButton title venue.name venue.address venue.city venue.timezone datetime_utc}}
-						
-						{{/createCalendarButton }}
-						
-						<br/>
-				{{/each}}
+				<table class="table">
+					<tbody>
+						{{#each events}}
+							<tr>
+								<td class="title">
+									{{title}}<br/>
+									{{venue.name}}<br/>
+									{{venue.display_location}}
+								</td>
+								<td class="date">	
+									{{#parseDate datetime_utc}}
+									{{/parseDate}}
+								</td>
+								<td>
+									{{#createCalendarButton title venue.name venue.address venue.city venue.timezone datetime_utc}}
+									{{/createCalendarButton }}
+								</td>
+							</tr>
+						{{/each}}	
+					</tbody>
+				</table>
 			</script> 
 	
 			<div id="performer_results"></div>

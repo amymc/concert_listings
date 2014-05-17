@@ -43,7 +43,7 @@ Handlebars.registerHelper('createCalendarButton', function(title, venue, address
 	timezone = Handlebars.Utils.escapeExpression(timezone);
 	date = Handlebars.Utils.escapeExpression(date);
 
-  	var result = '<button class="calendar" title="' + title + '" venue="' + venue + '" address="' + address + '" city="' + city + '" timezone="' + timezone +'" date="' + date +'"> Add to Google Calender </button>';
+  	var result = '<button class="calendar btn btn-primary" title="' + title + '" venue="' + venue + '" address="' + address + '" city="' + city + '" timezone="' + timezone +'" date="' + date +'"> Add to Google Calender </button>';
 
   	return new Handlebars.SafeString(result);
 });
@@ -118,36 +118,6 @@ $(document).ready(function() {
 	});
 });
 
-/*
-function handleClientLoad() {
-  gapi.client.setApiKey(apiKey);
-  window.setTimeout(checkAuth,1);
-  checkAuth();
-}
-
-function checkAuth() {
-  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true},
-      handleAuthResult);
-}
-
-function handleAuthResult(authResult) {
-  var authorizeButton = document.getElementById('authorize-button');
-  if (authResult) {
-    authorizeButton.style.visibility = 'hidden';
-    makeApiCall();
-  } else {
-    authorizeButton.style.visibility = '';
-    authorizeButton.onclick = handleAuthClick;
-   }
-}
-
-function handleAuthClick(event) {
-  gapi.auth.authorize(
-      {client_id: clientId, scope: scopes, immediate: false},
-      handleAuthResult);
-  return false;
-}
-*/
 
 function add_to_calendar(title, location, start_time, timezone, end_time) {
         var config = {
