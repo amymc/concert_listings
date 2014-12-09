@@ -1,15 +1,15 @@
 body{
-	text-align:center;
+  text-align:center;
 }
 
 input{
-	border-radius: 4px;
-	padding: 4px 0 5px 0;
-}	
+  border-radius: 4px;
+  padding: 4px 0 5px 0;
+} 
 
 .alert-danger{
-	width: 230px;
-	margin: 0 auto;
+  width: 230px;
+  margin: 0 auto;
 }
 
 ::-webkit-input-placeholder {
@@ -17,7 +17,7 @@ input{
 }
 
 :-moz-placeholder { /* Firefox 18- */
-	padding-left:10px;
+  padding-left:10px;
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
@@ -30,29 +30,29 @@ input{
 
 
 #fetch{
-	margin: 20px 0;
+  margin: 20px 0;
 }
 
 .col-md-6{
-	padding: 5px 0;
+  padding: 5px 0;
 }
 
 #performer_results, #event_results{
-	width: 50%;
-	min-width:367px;
-	margin: 0 auto;
+  width: 50%;
+  min-width:367px;
+  margin: 0 auto;
 }
 
 td{
-	height: 52px;
-	line-height: 52px;
-	vertical-align: middle;
+  height: 52px;
+  line-height: 52px;
+  vertical-align: middle;
 }
 
 .title{
-	text-align: left;
+  text-align: left;
 }
 
 .date{
-	width: 20%;
+  width: 20%;
 }
