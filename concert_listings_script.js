@@ -55,7 +55,7 @@ function find_performers(e){
     var performer_data, event_data;
  
     $("#performer_results").html('');
-          var performer_query = $('#search_term').val();
+        var performer_query = $('#search_term').val();
     
             //make call to the Seat Geek API with users search query        
             $.getJSON("http://api.seatgeek.com/2/performers?q="+performer_query+"&callback=?", function(performer_data) {
