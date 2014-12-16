@@ -47,12 +47,11 @@ Handlebars.registerHelper('createCalendarButton', function(title, venue, address
 
 $('#search').on('click', find_performers);
 
-var performer_id;
 
 function find_performers(e){
     var source = $("#performer_query").html(); 
     var template = Handlebars.compile(source);
-    var performer_data, event_data;
+    var performer_data, event_data, performer_id;
  
     $("#performer_results").html('');
         var performer_query = $('#search_term').val();
@@ -76,7 +75,7 @@ function find_performers(e){
         });
 }
 
-function find_concerts(perfomer_id){
+function find_concerts(performer_id){
     var source = $("#event_query").html(); 
     var template = Handlebars.compile(source);
     $("#performer_results").hide();
